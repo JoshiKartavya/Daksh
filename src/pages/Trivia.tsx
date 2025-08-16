@@ -1,5 +1,5 @@
 // Imports
-import { useMemo, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../context/AuthContext'
@@ -171,7 +171,6 @@ const Trivia = () => {
   const [answers, setAnswers] = useState<Record<string, number>>({})
   const [showResultModal, setShowResultModal] = useState(false)
   const [saving, setSaving] = useState(false)
-  const [score, setScore] = useState(0)
   const navigate = useNavigate()
   const { user } = useAuth()
 
@@ -220,12 +219,7 @@ const Trivia = () => {
     if (!user) return
     setSaving(true)
     const finalScore = calculateScore()
-    setScore(finalScore)
-    
-    // Calculate correct and wrong answers
-    const correctAnswers = questions.filter(q => answers[q.id] === q.answerIndex).length
-    const wrongAnswers = questions.filter(q => answers[q.id] !== undefined && answers[q.id] !== q.answerIndex).length
-    
+
     const payload = {
       user_id: user.id,
       question_ids: questions.map((q) => q.id),
@@ -234,7 +228,7 @@ const Trivia = () => {
       total_questions: questions.length,
       played_at: new Date().toISOString(),
     }
-    
+
     try {
       const { error } = await supabase.from('trivia_results').insert([payload])
       if (error) {
