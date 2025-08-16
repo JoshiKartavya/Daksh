@@ -70,6 +70,3 @@ export async function generateTriviaQuestions(): Promise<GeneratedQuestion[]> {
       answerIndex: typeof q.answerIndex === 'number' ? Math.max(0, Math.min(3, Math.floor(q.answerIndex))) : 0,
     }))
 }
-
-
-// AIzaSyDInQ4-7b-edbQfukSeqnl0IdiQ_Q9MUrw
